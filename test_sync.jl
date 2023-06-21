@@ -21,9 +21,9 @@ uri = "usb://0"
 # Only output errors from the logging framework
 logging.basicConfig(level=logging.ERROR)
 
+cb = CircularBuffer{Array{Float64,2}}(buffer_len)
+
 function simple_log(scf, logconf)
-
-
 
     @pywith crazyflie.syncLogger.SyncLogger(scf, lg_stab) as logger begin
 
@@ -39,11 +39,13 @@ function simple_log(scf, logconf)
             # print('[%d][%s]: %s' % (timestamp, logconf_name, data))
             print("Timestamp: ", timestamp)
 
-            @printf "   Raw gyro: %.3f    %.3f    %.3f" data["gyro_unfiltered.x"] data["gyro_unfiltered.x"] data["gyro_unfiltered.x"]
+            @printf "   Raw gyro: %.3f    %.3f    %.3f" data["gyro_unfiltered.x"] data["gyro_unfiltered.y"] data["gyro_unfiltered.z"]
 
             println("")
 
-            # println("   Pitch: ", data["stabilizer.pitch"])
+            # push data to circular buffer
+            sample = [data["gyro_unfiltered.x"] data["gyro_unfiltered.y"] data["gyro_unfiltered.z"]]
+            push!(cb, sample)
 
             count = count + 1
 
@@ -52,6 +54,8 @@ function simple_log(scf, logconf)
             end
         end
     end
+
+    println(cb)
 
 end
 
