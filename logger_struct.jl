@@ -14,7 +14,7 @@ struct LogProfiles
     lg_stab::PyObject
 end
 
-samples_channel = Channel(1000);
+samples_channel = Channel(100);
 # buffer_channel = Channel{CircularBuffer{Matrix{Float64}}}(1)
 
 ##
@@ -55,13 +55,13 @@ end
 
 
 # setter function 
-function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf)
+function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, count_max)
 
 
     @pywith log_obj.crazyflie.syncLogger.SyncLogger(scf, log_profiles.lg_stab) as logger begin
 
         count = 0
-        count_max = 1000
+        # count_max = 1000
 
         for log_entry in logger
 
@@ -93,12 +93,12 @@ end
 
 
 
-function log_start(log_obj::LoggerStruct1, log_profiles::LogProfiles, duration=5)
+function log_start(log_obj::LoggerStruct1, log_profiles::LogProfiles, duration)
 
     count_max = duration * 1000
 
     @pywith log_obj.crazyflie.syncCrazyflie.SyncCrazyflie(log_obj.uri, cf=log_obj.crazyflie.Crazyflie(rw_cache="./cache")) as scf begin
-        simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf)
+        simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, count_max)
     end
 
 

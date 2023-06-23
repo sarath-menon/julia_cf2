@@ -34,14 +34,8 @@ duration = 2
 include("tasks.jl")
 
 
-schedule(cfread_task);
-schedule(main_task);
+schedule(cfread_task)
+schedule(main_task)
 
-##
-
-# clear axes
-empty!(gui.ax1)
-empty!(gui.ax2)
-empty!(gui.ax3)
 
 

@@ -1,3 +1,6 @@
+
+duration = 3
+
 main_task = @task begin
 
     gui_data = reset_plot(gui)
@@ -8,7 +11,9 @@ main_task = @task begin
     # wait for data to become available in the channel
     wait(samples_channel)
 
-    for i in 1:1000
+    count = duration * 1000
+
+    for i in 1:count
         sample = take!(samples_channel)
 
         # push data to circular buffer
@@ -18,7 +23,7 @@ main_task = @task begin
             plot_gyro(gui_data, i, sample)
         end
 
-        sleep(1 / task_rate)
+        # sleep(1 / task_rate)
     end
 
 

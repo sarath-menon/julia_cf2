@@ -4,10 +4,6 @@ struct Gui2
     ax2::Axis
     ax3::Axis
     x_range::Int32
-
-    # points_x::Observable{Vector{Point{2,Float32}}}
-    # points_y::Observable{Vector{Point{2,Float32}}}
-    # points_z::Observable{Vector{Point{2,Float32}}}
 end
 
 struct GuiData
