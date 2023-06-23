@@ -30,45 +30,15 @@ log_obj = LoggerStruct1("usb://0", pyimport("cflib"), pyimport("time"), pyimport
 
 duration = 2
 
-
-
 ##
-# c = Condition()
 
 main_task = @task begin
 
     reset_plot(gui)
-    # # add line plot
-    # points_x = Observable(Point2f[])
-    # points_y = Observable(Point2f[])
-    # points_z = Observable(Point2f[])
-
-    # lines!(gui.ax1, points_x)
-    # lines!(gui.ax2, points_y)
-    # lines!(gui.ax3, points_z)
-
-    # # for dynamically updating the axes
-    # on(points) do point
-    #     x_right_limit = last(points.val)[1][1]
-    #     # x_right_limit = 50
-
-    #     if x_right_limit >= x_range
-    #         x_left_limit = x_right_limit - x_range
-    #     else
-    #         x_left_limit = 0
-    #     end
-
-    #     limits!(ax, x_left_limit, x_right_limit, -4, 4)
-    # end
-
 
     println("Waiting to receive samples from channel")
 
     for i in 1:1000
-        println("sample received")
-
-
-
         sample = take!(samples_channel)
 
         # push data to circular buffer
@@ -76,13 +46,7 @@ main_task = @task begin
 
         if i % 10 == 0
             plot_gyro(gui, i, sample)
-            # # push data to plot buffer
-            # points_x[] = push!(points_x[], [(i / 1000) sample[1]])
-            # points_y[] = push!(points_y[], [(i / 1000) sample[2]])
-            # points_z[] = push!(points_z[], [(i / 1000) sample[3]])
         end
-
-        # println(i, sample)
     end
 end
 
