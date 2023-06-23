@@ -65,11 +65,11 @@ duration = 2
         sample = take!(samples_channel)
 
         # push data to circular buffer
-        push!(gyro_cb, [sample sample sample])
+        push!(gyro_cb, sample)
 
         if i % 10 == 0
             # push data to plot buffer
-            points[] = push!(points[], [(i / 1000) sample])
+            points[] = push!(points[], [(i / 1000) sample[2]])
         end
 
         # println(i, sample)

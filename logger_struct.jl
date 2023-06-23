@@ -65,22 +65,17 @@ function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf)
 
         for log_entry in logger
 
-            # println("selva")
-
             timestamp = log_entry[1]
             data = log_entry[2]
             logconf_name = log_entry[3]
 
             # print("Timestamp: ", timestamp)
-
             # @printf "   Raw gyro: %.3f    %.3f    %.3f" data["gyro_unfiltered.x"] data["gyro_unfiltered.y"] data["gyro_unfiltered.z"]
-
             # println("")
 
-            # push data to circular buffer
+            # push data to channel
             sample = [data["gyro_unfiltered.x"] data["gyro_unfiltered.y"] data["gyro_unfiltered.z"]]
-            # push!(circular_buffer, sample)
-            put!(samples_channel, data["gyro_unfiltered.x"])
+            put!(samples_channel, sample)
 
             count += 1
 
