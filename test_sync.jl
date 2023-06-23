@@ -6,7 +6,9 @@ import julia_cf2
 using PyCall
 using Printf
 using DataStructures
+using GLMakie
 
+GLMakie.activate!(inline=false)
 # package imports
 cflib = pyimport("cflib")
 logging = pyimport("logging")
@@ -15,9 +17,6 @@ time = pyimport("time")
 crazyflie = pyimport("cflib.crazyflie")
 log = pyimport("cflib.crazyflie.log")
 syncLogger = pyimport("cflib.crazyflie.syncLogger")
-
-# URI to the Crazyflie to connect to
-uri = "usb://0"
 
 # Only output errors from the logging framework
 logging.basicConfig(level=logging.ERROR)
@@ -71,7 +70,7 @@ function simple_log(scf, logconf)
                 points[] = push!(points[], [(count / 1000) data["gyro_unfiltered.x"]])
             end
 
-            count = count + 1
+            count += 1
 
             if count == 10000
                 break
@@ -83,6 +82,11 @@ function simple_log(scf, logconf)
 
 end
 
+##
+
+# URI to the Crazyflie to connect to
+uri = "usb://0"
+
 # Initialize the low-level drivers
 cflib.crtp.init_drivers()
 
@@ -91,7 +95,6 @@ lg_stab.add_variable("gyro_unfiltered.x", "float")
 lg_stab.add_variable("gyro_unfiltered.y", "float")
 lg_stab.add_variable("gyro_unfiltered.z", "float")
 
-time.sleep(1)
 
 @async begin
     @pywith crazyflie.syncCrazyflie.SyncCrazyflie(uri, cf=crazyflie.Crazyflie(rw_cache="./cache")) as scf begin

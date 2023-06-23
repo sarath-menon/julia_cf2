@@ -1,4 +1,6 @@
 module julia_cf2
+using Revise
+
 
 function rad_per_sample_to_hz(val_rad)
     val_hz = val_rad / (2 * π)
