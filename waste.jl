@@ -57,30 +57,26 @@ lines!(ax, points)
 
 include("logger_struct.jl")
 
-
 log_obj = LoggerStruct1("usb://0", pyimport("cflib"), pyimport("time"), pyimport("cflib.crazyflie"), pyimport("cflib.crazyflie.syncLogger"), pyimport("logging"))
 
-log_profiles = LogProfiles(log_obj.crazyflie.log.LogConfig(name="Stabilizer", period_in_ms=10))
-
-log_init(log_obj, log_profiles)
 
 
 duration = 2
 
-# @async begin
-log_start(log_obj, log_profiles, gyro_cb, points, duration)
-# end
+##
+@async begin
+    for i in 1:1000
+        sample = take!(samples_channel)
+        push!(gyro_cb, [sample sample sample])
 
-# @async begin
-
-for i in 1:1000
-    sample = take!(samples_channel)
-    push!(gyro_cb, [sample sample sample])
-
-    println(i, sample)
+        println(i, sample)
+    end
 end
 
-# end
+##
+log_profiles = LogProfiles(log_obj.crazyflie.log.LogConfig(name="Stabilizer", period_in_ms=10))
+log_init(log_obj, log_profiles)
+log_start(log_obj, log_profiles, gyro_cb, points, duration)
 
 
 ##

@@ -15,6 +15,7 @@ struct LogProfiles
 end
 
 samples_channel = Channel(1000);
+# buffer_channel = Channel{CircularBuffer{Matrix{Float64}}}(1)
 
 ##
 
