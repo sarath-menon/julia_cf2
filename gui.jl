@@ -72,9 +72,9 @@ function reset_plot(gui::Gui)
     gui_data = GuiData(points_x, points_y, points_z)
 
     # # add line plot
-    lines!(gui.ax1, gui_data.points_x)
-    lines!(gui.ax2, gui_data.points_y)
-    lines!(gui.ax3, gui_data.points_z)
+    lines!(gui.ax1, gui_data.points_x, color=:black)
+    lines!(gui.ax2, gui_data.points_y, color=:black)
+    lines!(gui.ax3, gui_data.points_z, color=:black)
 
     return gui_data
 end
