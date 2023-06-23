@@ -83,10 +83,10 @@ function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, circ
             put!(samples_channel, data["gyro_unfiltered.x"])
 
 
-            # push data to plot buffer
-            if count % 10 == 0
-                points[] = push!(points[], [(count / 1000) data["gyro_unfiltered.x"]])
-            end
+            # # push data to plot buffer
+            # if count % 10 == 0
+            #     points[] = push!(points[], [(count / 1000) data["gyro_unfiltered.x"]])
+            # end
 
             # take!(samples_channel)
 

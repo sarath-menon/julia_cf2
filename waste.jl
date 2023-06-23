@@ -33,11 +33,10 @@ gyro_cb = CircularBuffer{Array{Float64,2}}(buffer_len)
 
 
 # for glmakie rad_per_sample_to_hz
-points = Observable(Point2f[])
+
 x = Observable(Real)
 
-# add line plot
-lines!(ax, points)
+
 
 
 # # for dynamically updating the axes
@@ -59,21 +58,30 @@ include("logger_struct.jl")
 
 log_obj = LoggerStruct1("usb://0", pyimport("cflib"), pyimport("time"), pyimport("cflib.crazyflie"), pyimport("cflib.crazyflie.syncLogger"), pyimport("logging"))
 
-
-
 duration = 2
 
 ##
 @async begin
+    # add line plot
+    points = Observable(Point2f[])
+    lines!(ax, points)
+
     for i in 1:1000
         sample = take!(samples_channel)
+
+        # push data to circular buffer
         push!(gyro_cb, [sample sample sample])
+
+        # push data to plot buffer
+        points[] = push!(points[], [(i / 1000) sample])
 
         println(i, sample)
     end
 end
 
 ##
+
+
 log_profiles = LogProfiles(log_obj.crazyflie.log.LogConfig(name="Stabilizer", period_in_ms=10))
 log_init(log_obj, log_profiles)
 log_start(log_obj, log_profiles, gyro_cb, points, duration)
@@ -81,6 +89,6 @@ log_start(log_obj, log_profiles, gyro_cb, points, duration)
 
 ##
 
-# empty!(ax)
+empty!(ax)
 
 
