@@ -15,11 +15,18 @@ GLMakie.activate!(inline=false)
 
 # create GLMakie plot
 fig = Figure()
-ax = Axis(fig[1, 1])
+ax1 = Axis(fig[1, 1])
+ax2 = Axis(fig[2, 1])
+ax3 = Axis(fig[3, 1])
 
-deregister_interaction!(ax, :rectanglezoom)
 x_range = 10
-limits!(ax, 0, x_range, -4, 4)
+limits!(ax1, 0, x_range, -4, 4)
+limits!(ax2, 0, x_range, -4, 4)
+limits!(ax3, 0, x_range, -4, 4)
+
+deregister_interaction!(ax1, :rectanglezoom)
+deregister_interaction!(ax2, :rectanglezoom)
+deregister_interaction!(ax3, :rectanglezoom)
 
 display(fig)
 
@@ -31,10 +38,6 @@ display(fig)
 buffer_len = 5
 gyro_cb = CircularBuffer{Array{Float64,2}}(buffer_len)
 
-
-
-
-
 include("logger_struct.jl")
 
 log_obj = LoggerStruct1("usb://0", pyimport("cflib"), pyimport("time"), pyimport("cflib.crazyflie"), pyimport("cflib.crazyflie.syncLogger"), pyimport("logging"))
@@ -44,8 +47,13 @@ duration = 2
 ##
 @async begin
     # add line plot
-    points = Observable(Point2f[])
-    lines!(ax, points)
+    points_x = Observable(Point2f[])
+    points_y = Observable(Point2f[])
+    points_z = Observable(Point2f[])
+
+    lines!(ax1, points_x)
+    lines!(ax2, points_y)
+    lines!(ax3, points_z)
 
     # # for dynamically updating the axes
     # on(points) do point
@@ -69,7 +77,9 @@ duration = 2
 
         if i % 10 == 0
             # push data to plot buffer
-            points[] = push!(points[], [(i / 1000) sample[2]])
+            points_x[] = push!(points_x[], [(i / 1000) sample[1]])
+            points_y[] = push!(points_y[], [(i / 1000) sample[2]])
+            points_z[] = push!(points_z[], [(i / 1000) sample[3]])
         end
 
         # println(i, sample)
@@ -86,6 +96,8 @@ log_start(log_obj, log_profiles, duration)
 
 ##
 
-empty!(ax)
+empty!(ax1)
+empty!(ax2)
+empty!(ax3)
 
 
