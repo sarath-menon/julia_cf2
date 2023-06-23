@@ -44,8 +44,12 @@ log_obj = LoggerStruct1("usb://0", pyimport("cflib"), pyimport("time"), pyimport
 
 duration = 2
 
+
+
 ##
-@async begin
+# c = Condition()
+
+main_task = @task begin
     # add line plot
     points_x = Observable(Point2f[])
     points_y = Observable(Point2f[])
@@ -69,7 +73,13 @@ duration = 2
     #     limits!(ax, x_left_limit, x_right_limit, -4, 4)
     # end
 
+
+    println("Waiting to receive samples from channel")
+
     for i in 1:1000
+
+
+
         sample = take!(samples_channel)
 
         # push data to circular buffer
@@ -88,11 +98,17 @@ end
 
 ##
 
+cfread_task = @task begin
 
-log_profiles = LogProfiles(log_obj.crazyflie.log.LogConfig(name="Stabilizer", period_in_ms=10))
-log_init(log_obj, log_profiles)
-log_start(log_obj, log_profiles, duration)
+    log_profiles = LogProfiles(log_obj.crazyflie.log.LogConfig(name="Stabilizer", period_in_ms=10))
+    log_init(log_obj, log_profiles)
+    log_start(log_obj, log_profiles, duration)
+end
 
+##
+
+schedule(main_task);
+schedule(cfread_task);
 
 ##
 

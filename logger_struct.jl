@@ -75,6 +75,8 @@ function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf)
 
             # push data to channel
             sample = [data["gyro_unfiltered.x"] data["gyro_unfiltered.y"] data["gyro_unfiltered.z"]]
+
+            # println("Waiting for channel to be read)
             put!(samples_channel, sample)
 
             count += 1
