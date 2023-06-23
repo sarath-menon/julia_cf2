@@ -19,7 +19,7 @@
         # Initialize the low-level drivers
         self.cflib.crtp.init_drivers()
 
-        self.lg_stab = log.LogConfig(name="Stabilizer", period_in_ms=10)
+        self.lg_stab = self.log.LogConfig(name="Stabilizer", period_in_ms=10)
         self.lg_stab.add_variable("gyro_unfiltered.x", "float")
         self.lg_stab.add_variable("gyro_unfiltered.y", "float")
         self.lg_stab.add_variable("gyro_unfiltered.z", "float")
@@ -34,7 +34,6 @@
         @pywith self.crazyflie.syncLogger.SyncLogger(scf, self.lg_stab) as logger begin
 
             count = 0
-            println("selva")
 
             for log_entry in logger
 
@@ -42,12 +41,11 @@
                 data = log_entry[2]
                 logconf_name = log_entry[3]
 
-                # print('[%d][%s]: %s' % (timestamp, logconf_name, data))
-                print("Timestamp: ", timestamp)
+                # print("Timestamp: ", timestamp)
 
-                @printf "   Raw gyro: %.3f    %.3f    %.3f" data["gyro_unfiltered.x"] data["gyro_unfiltered.y"] data["gyro_unfiltered.z"]
+                # @printf "   Raw gyro: %.3f    %.3f    %.3f" data["gyro_unfiltered.x"] data["gyro_unfiltered.y"] data["gyro_unfiltered.z"]
 
-                println("")
+                # println("")
 
                 # push data to circular buffer
                 sample = [data["gyro_unfiltered.x"] data["gyro_unfiltered.y"] data["gyro_unfiltered.z"]]
@@ -63,6 +61,10 @@
                 if count == self.count_max
                     break
                 end
+
+                fps = 1000
+                sleep(1 / fps)
+
             end
         end
 
@@ -73,12 +75,12 @@
         self.duration = duration
         self.count_max = self.duration * 1000
 
-        @async begin
-            @pywith self.crazyflie.syncCrazyflie.SyncCrazyflie(self.uri, cf=self.crazyflie.Crazyflie(rw_cache="./cache")) as scf begin
-                # print("Hello World!")
-                self.simple_log(scf, circular_buffer, points)
-            end
+
+        @pywith self.crazyflie.syncCrazyflie.SyncCrazyflie(self.uri, cf=self.crazyflie.Crazyflie(rw_cache="./cache")) as scf begin
+            # print("Hello World!")
+            self.simple_log(scf, circular_buffer, points)
         end
+
     end
 
     # getter function 
