@@ -12,17 +12,12 @@ include("logger_class.jl")
 
 GLMakie.activate!(inline=false)
 
-
-
 ##
 
-# for glmakie rad_per_sample_to_hz
-points = Observable(Point2f[])
 
 # create GLMakie plot
 f = Figure()
 ax = Axis(f[1, 1])
-lines!(ax, points)
 limits!(ax, 0, 10, -4, 4)
 
 display(f)
@@ -34,13 +29,34 @@ buffer_len = 5
 gyro_cb = CircularBuffer{Array{Float64,2}}(buffer_len)
 
 
+# for glmakie rad_per_sample_to_hz
+points = Observable(Point2f[])
+# add line plot
+lines!(ax, points)
+
 # URI to the Crazyflie to connect to
 uri = "usb://0"
 
 app = Cf2Logger(uri)
 
-duration = 5
-app.log_start(gyro_cb, duration)
-
+duration = 2
+app.log_start(gyro_cb, points, duration)
 
 println(cb)
+
+##
+
+
+# fps = 60
+# nframes = 120
+
+# for i = 1:nframes
+#     new_point = randn(1)
+#     points[] = push!(points[], [i sin(i)])
+#     sleep(1 / fps) # refreshes the display!
+# end
+
+##
+# clear plot
+# delete!(ax, line_plot)
+empty!(ax)

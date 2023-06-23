@@ -30,7 +30,7 @@
     end
 
     # setter function 
-    function simple_log(self, scf, circular_buffer)
+    function simple_log(self, scf, circular_buffer, points)
         @pywith self.crazyflie.syncLogger.SyncLogger(scf, self.lg_stab) as logger begin
 
             count = 0
@@ -68,7 +68,7 @@
 
     end
 
-    function log_start(self, circular_buffer, duration=5)
+    function log_start(self, circular_buffer, points, duration=5)
 
         self.duration = duration
         self.count_max = self.duration * 1000
@@ -76,7 +76,7 @@
         @async begin
             @pywith self.crazyflie.syncCrazyflie.SyncCrazyflie(self.uri, cf=self.crazyflie.Crazyflie(rw_cache="./cache")) as scf begin
                 # print("Hello World!")
-                self.simple_log(scf, circular_buffer)
+                self.simple_log(scf, circular_buffer, points)
             end
         end
     end
