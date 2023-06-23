@@ -4,9 +4,10 @@ GLMakie.activate!(inline=false)
 
 f = Figure()
 ax = Axis(f[1, 1])
-limits!(ax, 0, 120, -4, 4)
-
 x_range = 10
+limits!(ax, 0, x_range, -4, 4)
+
+
 
 display(f)
 
@@ -14,21 +15,21 @@ display(f)
 points = Observable(Point2f[])
 line_plot = lines!(ax, points)
 
-fps = 60
-nframes = 120
+fps = 30
+nframes = 80
 
 on(points) do point
-    x_rlimit = last(points.val)[1][1]
-    println("Latest point is:", x_rlimit)
+    x_right_limit = last(points.val)[1][1]
 
-    if x_rlimit >= x_range
-        x_llimit = x_rlimit - x_range
+    if x_right_limit >= x_range
+        x_left_limit = x_right_limit - x_range
     else
-        x_llimit = 0
+        x_left_limit = 0
     end
 
-    limits!(ax, x_llimit, x_rlimit, -4, 4)
+    limits!(ax, x_left_limit, x_right_limit, -4, 4)
 end
+
 
 
 for i = 1:nframes
