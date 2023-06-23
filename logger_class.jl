@@ -30,7 +30,7 @@
     end
 
     # setter function 
-    function simple_log(self, scf)
+    function simple_log(self, scf, circular_buffer)
         @pywith self.crazyflie.syncLogger.SyncLogger(scf, self.lg_stab) as logger begin
 
             count = 0
@@ -51,7 +51,7 @@
 
                 # push data to circular buffer
                 sample = [data["gyro_unfiltered.x"] data["gyro_unfiltered.y"] data["gyro_unfiltered.z"]]
-                # push!(cb, sample)
+                push!(circular_buffer, sample)
 
                 # push data to plot buffer
                 if count % 10 == 0
@@ -60,7 +60,7 @@
 
                 count += 1
 
-                if count == 10000
+                if count == self.count_max
                     break
                 end
             end
@@ -68,11 +68,15 @@
 
     end
 
-    function log_start(self)
+    function log_start(self, circular_buffer, duration=5)
+
+        self.duration = duration
+        self.count_max = self.duration * 1000
+
         @async begin
             @pywith self.crazyflie.syncCrazyflie.SyncCrazyflie(self.uri, cf=self.crazyflie.Crazyflie(rw_cache="./cache")) as scf begin
                 # print("Hello World!")
-                self.simple_log(scf)
+                self.simple_log(scf, circular_buffer)
             end
         end
     end

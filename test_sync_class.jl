@@ -12,9 +12,7 @@ include("logger_class.jl")
 
 GLMakie.activate!(inline=false)
 
-# create circular buffer
-buffer_len = 5
-cb = CircularBuffer{Array{Float64,2}}(buffer_len)
+
 
 ##
 
@@ -31,10 +29,18 @@ display(f)
 
 ##
 
+# create circular buffer to hold gyro data
+buffer_len = 5
+gyro_cb = CircularBuffer{Array{Float64,2}}(buffer_len)
+
+
 # URI to the Crazyflie to connect to
 uri = "usb://0"
 
-app = Cf2Logger()
-app.log_start()
+app = Cf2Logger(uri)
+
+duration = 5
+app.log_start(gyro_cb, duration)
 
 
+println(cb)
