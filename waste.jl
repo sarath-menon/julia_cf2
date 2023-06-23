@@ -3,6 +3,7 @@ import Pkg;
 Pkg.activate(@__DIR__);
 Pkg.instantiate();
 
+using Revise
 import julia_cf2
 using PyCall
 using Printf
@@ -11,26 +12,11 @@ using GLMakie
 
 GLMakie.activate!(inline=false)
 ##
+include("gui.jl")
 
+gui = gui_init()
 
-# create GLMakie plot
-fig = Figure()
-ax1 = Axis(fig[1, 1])
-ax2 = Axis(fig[2, 1])
-ax3 = Axis(fig[3, 1])
-
-x_range = 10
-limits!(ax1, 0, x_range, -4, 4)
-limits!(ax2, 0, x_range, -4, 4)
-limits!(ax3, 0, x_range, -4, 4)
-
-deregister_interaction!(ax1, :rectanglezoom)
-deregister_interaction!(ax2, :rectanglezoom)
-deregister_interaction!(ax3, :rectanglezoom)
-
-display(fig)
-
-
+display(gui.fig)
 
 ##
 
@@ -50,14 +36,16 @@ duration = 2
 # c = Condition()
 
 main_task = @task begin
-    # add line plot
-    points_x = Observable(Point2f[])
-    points_y = Observable(Point2f[])
-    points_z = Observable(Point2f[])
 
-    lines!(ax1, points_x)
-    lines!(ax2, points_y)
-    lines!(ax3, points_z)
+    reset_plot(gui)
+    # # add line plot
+    # points_x = Observable(Point2f[])
+    # points_y = Observable(Point2f[])
+    # points_z = Observable(Point2f[])
+
+    # lines!(gui.ax1, points_x)
+    # lines!(gui.ax2, points_y)
+    # lines!(gui.ax3, points_z)
 
     # # for dynamically updating the axes
     # on(points) do point
@@ -77,6 +65,7 @@ main_task = @task begin
     println("Waiting to receive samples from channel")
 
     for i in 1:1000
+        println("sample received")
 
 
 
@@ -86,10 +75,11 @@ main_task = @task begin
         push!(gyro_cb, sample)
 
         if i % 10 == 0
-            # push data to plot buffer
-            points_x[] = push!(points_x[], [(i / 1000) sample[1]])
-            points_y[] = push!(points_y[], [(i / 1000) sample[2]])
-            points_z[] = push!(points_z[], [(i / 1000) sample[3]])
+            plot_gyro(gui, i, sample)
+            # # push data to plot buffer
+            # points_x[] = push!(points_x[], [(i / 1000) sample[1]])
+            # points_y[] = push!(points_y[], [(i / 1000) sample[2]])
+            # points_z[] = push!(points_z[], [(i / 1000) sample[3]])
         end
 
         # println(i, sample)
@@ -107,8 +97,8 @@ end
 
 ##
 
-schedule(main_task);
 schedule(cfread_task);
+schedule(main_task);
 
 ##
 
