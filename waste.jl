@@ -32,26 +32,7 @@ buffer_len = 5
 gyro_cb = CircularBuffer{Array{Float64,2}}(buffer_len)
 
 
-# for glmakie rad_per_sample_to_hz
 
-x = Observable(Real)
-
-
-
-
-# # for dynamically updating the axes
-# on(points) do point
-#     # x_right_limit = last(points.val)[1][1]
-#     x_right_limit = 50
-
-#     if x_right_limit >= x_range
-#         x_left_limit = x_right_limit - x_range
-#     else
-#         x_left_limit = 0
-#     end
-
-#     limits!(ax, x_left_limit, x_right_limit, -4, 4)
-# end
 
 
 include("logger_struct.jl")
@@ -66,6 +47,20 @@ duration = 2
     points = Observable(Point2f[])
     lines!(ax, points)
 
+    # # for dynamically updating the axes
+    # on(points) do point
+    #     x_right_limit = last(points.val)[1][1]
+    #     # x_right_limit = 50
+
+    #     if x_right_limit >= x_range
+    #         x_left_limit = x_right_limit - x_range
+    #     else
+    #         x_left_limit = 0
+    #     end
+
+    #     limits!(ax, x_left_limit, x_right_limit, -4, 4)
+    # end
+
     for i in 1:1000
         sample = take!(samples_channel)
 
@@ -75,7 +70,7 @@ duration = 2
         # push data to plot buffer
         points[] = push!(points[], [(i / 1000) sample])
 
-        println(i, sample)
+        # println(i, sample)
     end
 end
 
