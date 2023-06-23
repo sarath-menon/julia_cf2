@@ -1,3 +1,4 @@
+using Base.Threads
 
 struct LoggerStruct1
     uri::String
@@ -13,6 +14,7 @@ struct LogProfiles
     lg_stab::PyObject
 end
 
+samples_channel = Channel(1000);
 
 ##
 
@@ -53,7 +55,8 @@ end
 
 # setter function 
 function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, circular_buffer, points)
-    # logger = log_obj.crazyflie.syncLogger.SyncLogger(scf, log_profiles.lg_stab)
+
+
     @pywith log_obj.crazyflie.syncLogger.SyncLogger(scf, log_profiles.lg_stab) as logger begin
 
         count = 0
@@ -75,12 +78,16 @@ function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, circ
 
             # push data to circular buffer
             sample = [data["gyro_unfiltered.x"] data["gyro_unfiltered.y"] data["gyro_unfiltered.z"]]
-            push!(circular_buffer, sample)
+            # push!(circular_buffer, sample)
+            put!(samples_channel, data["gyro_unfiltered.x"])
+
 
             # push data to plot buffer
             if count % 10 == 0
                 points[] = push!(points[], [(count / 1000) data["gyro_unfiltered.x"]])
             end
+
+            # take!(samples_channel)
 
             count += 1
 
