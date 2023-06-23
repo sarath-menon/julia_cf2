@@ -67,8 +67,10 @@ duration = 2
         # push data to circular buffer
         push!(gyro_cb, [sample sample sample])
 
-        # push data to plot buffer
-        points[] = push!(points[], [(i / 1000) sample])
+        if i % 10 == 0
+            # push data to plot buffer
+            points[] = push!(points[], [(i / 1000) sample])
+        end
 
         # println(i, sample)
     end
@@ -79,7 +81,7 @@ end
 
 log_profiles = LogProfiles(log_obj.crazyflie.log.LogConfig(name="Stabilizer", period_in_ms=10))
 log_init(log_obj, log_profiles)
-log_start(log_obj, log_profiles, gyro_cb, points, duration)
+log_start(log_obj, log_profiles, duration)
 
 
 ##

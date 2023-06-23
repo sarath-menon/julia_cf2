@@ -55,7 +55,7 @@ end
 
 
 # setter function 
-function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, circular_buffer, points)
+function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf)
 
 
     @pywith log_obj.crazyflie.syncLogger.SyncLogger(scf, log_profiles.lg_stab) as logger begin
@@ -82,14 +82,6 @@ function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, circ
             # push!(circular_buffer, sample)
             put!(samples_channel, data["gyro_unfiltered.x"])
 
-
-            # # push data to plot buffer
-            # if count % 10 == 0
-            #     points[] = push!(points[], [(count / 1000) data["gyro_unfiltered.x"]])
-            # end
-
-            # take!(samples_channel)
-
             count += 1
 
             if count == count_max
@@ -97,19 +89,19 @@ function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, circ
             end
 
             fps = 1000
-            sleep(1 / fps)
+            # sleep(1 / fps)
         end
     end
 end
 
 
 
-function log_start(log_obj::LoggerStruct1, log_profiles::LogProfiles, circular_buffer, points, duration=5)
+function log_start(log_obj::LoggerStruct1, log_profiles::LogProfiles, duration=5)
 
     count_max = duration * 1000
 
     @pywith log_obj.crazyflie.syncCrazyflie.SyncCrazyflie(log_obj.uri, cf=log_obj.crazyflie.Crazyflie(rw_cache="./cache")) as scf begin
-        simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, circular_buffer, points)
+        simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf)
     end
 
 
