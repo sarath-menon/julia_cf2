@@ -34,6 +34,21 @@ function gui_init()
     points_y = Observable(Point2f[])
     points_z = Observable(Point2f[])
 
+    # # for dynamically updating the axes
+    # on(points) do point
+    #     x_right_limit = last(points.val)[1][1]
+    #     # x_right_limit = 50
+
+    #     if x_right_limit >= x_range
+    #         x_left_limit = x_right_limit - x_range
+    #     else
+    #         x_left_limit = 0
+    #     end
+
+    #     limits!(ax, x_left_limit, x_right_limit, -4, 4)
+    # end
+
+
 
     gui = Gui(fig, ax1, ax2, ax3, x_range, points_x, points_y, points_z)
 

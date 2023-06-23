@@ -24,8 +24,6 @@ on(button.clicks) do n
 end
 
 ##
-flag[] = 0
-
 
 task1 = @async try
     flag[] = true
