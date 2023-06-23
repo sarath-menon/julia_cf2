@@ -1,6 +1,6 @@
 main_task = @task begin
 
-    reset_plot(gui)
+    gui_data = reset_plot(gui)
     task_rate = 1000 #hz
 
     println("Waiting to receive samples from channel")
@@ -15,7 +15,7 @@ main_task = @task begin
         push!(gyro_cb, sample)
 
         if i % 10 == 0
-            plot_gyro(gui, i, sample)
+            plot_gyro(gui_data, i, sample)
         end
 
         sleep(1 / task_rate)

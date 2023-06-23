@@ -1,16 +1,23 @@
-struct Gui3
+struct Gui2
     fig::Figure
     ax1::Axis
     ax2::Axis
     ax3::Axis
     x_range::Int32
 
+    # points_x::Observable{Vector{Point{2,Float32}}}
+    # points_y::Observable{Vector{Point{2,Float32}}}
+    # points_z::Observable{Vector{Point{2,Float32}}}
+end
+
+struct GuiData
     points_x::Observable{Vector{Point{2,Float32}}}
     points_y::Observable{Vector{Point{2,Float32}}}
     points_z::Observable{Vector{Point{2,Float32}}}
 end
 
 Gui = Gui3
+GuiData1 = GuiData
 
 function gui_init()
     fig = Figure()
@@ -62,20 +69,24 @@ function reset_plot(gui::Gui)
     empty!(gui.ax2)
     empty!(gui.ax3)
 
-    # # add line plot
-    # gui.points_x = Observable(Point2f[])
-    # gui.points_y = Observable(Point2f[])
-    # gui.points_z = Observable(Point2f[])
+    points_x = Observable(Point2f[])
+    points_y = Observable(Point2f[])
+    points_z = Observable(Point2f[])
 
-    lines!(gui.ax1, gui.points_x)
-    lines!(gui.ax2, gui.points_y)
-    lines!(gui.ax3, gui.points_z)
+    gui_data = GuiData(points_x, points_y, points_z)
+
+    # # add line plot
+    lines!(gui.ax1, gui_data.points_x)
+    lines!(gui.ax2, gui_data.points_y)
+    lines!(gui.ax3, gui_data.points_z)
+
+    return gui_data
 end
 
-function plot_gyro(gui::Gui, i, sample)
+function plot_gyro(gui_data::GuiData, i, sample)
     # push data to plot buffer
-    gui.points_x[] = push!(gui.points_x[], [(i / 1000) sample[1]])
-    gui.points_y[] = push!(gui.points_y[], [(i / 1000) sample[2]])
-    gui.points_z[] = push!(gui.points_z[], [(i / 1000) sample[3]])
+    gui_data.points_x[] = push!(gui_data.points_x[], [(i / 1000) sample[1]])
+    gui_data.points_y[] = push!(gui_data.points_y[], [(i / 1000) sample[2]])
+    gui_data.points_z[] = push!(gui_data.points_z[], [(i / 1000) sample[3]])
 end
 
