@@ -17,9 +17,17 @@ GuiData1 = GuiData
 
 function gui_init()
     fig = Figure()
-    ax1 = Axis(fig[1, 1])
-    ax2 = Axis(fig[2, 1])
-    ax3 = Axis(fig[3, 1])
+
+    # common properties
+    titlesize = 30
+    ylabelsize = 20
+
+    xticklabelsize = 20
+    yticklabelsize = 20
+
+    ax1 = Axis(fig[1, 1], title="Gyro X", titlesize=titlesize, ylabelsize=ylabelsize, yticklabelsize=yticklabelsize, xticklabelsize=xticklabelsize)
+    ax2 = Axis(fig[2, 1], title="Gyro Y", titlesize=titlesize, ylabelsize=ylabelsize, yticklabelsize=yticklabelsize, xticklabelsize=xticklabelsize)
+    ax3 = Axis(fig[3, 1], title="Gyro Z", titlesize=titlesize, ylabelsize=ylabelsize, yticklabelsize=yticklabelsize, xticklabelsize=xticklabelsize)
 
     # set axis range
     x_range = 10
