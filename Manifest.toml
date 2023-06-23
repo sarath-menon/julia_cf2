@@ -2,7 +2,7 @@
 
 julia_version = "1.8.5"
 manifest_format = "2.0"
-project_hash = "1bfd12b95eb0866095dc0a18c47bc7e566fd32e8"
+project_hash = "ef1e991ce125a05ef9a1c66f6033b8d7f608858a"
 
 [[deps.AbstractFFTs]]
 deps = ["ChainRulesCore", "LinearAlgebra"]
@@ -463,6 +463,12 @@ deps = ["BitFlags", "CEnum", "Cairo", "Cairo_jll", "GTK4_jll", "Glib_jll", "Grap
 git-tree-sha1 = "18e0d12ef1e16568d862e4316f5e2dc9bfaac120"
 uuid = "9db2cae5-386f-4011-9d63-a5602296539b"
 version = "0.4.1"
+
+[[deps.Gtk4Makie]]
+deps = ["ColorTypes", "Colors", "FileIO", "GLMakie", "GeometryBasics", "Gtk4", "LinearAlgebra", "ModernGL", "Observables", "PrecompileTools", "ShaderAbstractions"]
+git-tree-sha1 = "6790db794a021a63c5d0710692969d351f9f3b86"
+uuid = "478199e7-b407-4926-87ea-7196203a28d8"
+version = "0.1.1"
 
 [[deps.HarfBuzz_jll]]
 deps = ["Artifacts", "Cairo_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "Graphite2_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Pkg"]
