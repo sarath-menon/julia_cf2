@@ -21,8 +21,9 @@ schedule(gui_task)
 ##
 include("src/tasks/tasks.jl")
 
+
 schedule(cfread_task)
-schedule(main_task)
+# schedule(main_task)
 
 
 

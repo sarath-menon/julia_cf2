@@ -16,7 +16,7 @@ gui_task = @task begin
     # wait for data to become available in the channel
     wait(gui_channel)
 
-    count = duration * 10000
+    count = duration * 1000000
 
     for i in 1:count
         sample = take!(gui_channel)

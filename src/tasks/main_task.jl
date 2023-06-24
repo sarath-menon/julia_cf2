@@ -1,8 +1,8 @@
 
 
 # include("./../lib/gui.jl")
-main_task = @task begin
-    # @tspawnat 3 begin
+# main_task = @task begin
+@tspawnat 3 begin
 
     # create chebyshev filter 
     ripple = 3 # max passband ripple in dB
