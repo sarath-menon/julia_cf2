@@ -1,7 +1,7 @@
 include("logger_struct.jl")
 
 
-const duration_::Int32 = 3
+const duration_::Integer = 3
 
 main_task = @task begin
 

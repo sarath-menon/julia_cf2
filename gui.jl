@@ -3,7 +3,7 @@ struct Gui2
     ax1::Axis
     ax2::Axis
     ax3::Axis
-    x_range::Int32
+    x_range::Integer
 end
 
 struct GuiData

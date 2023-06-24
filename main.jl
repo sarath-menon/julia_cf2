@@ -24,7 +24,7 @@ display(gui.fig)
 ##
 
 # create circular buffer to hold gyro data
-const gyro_cb_len::Int32 = 5
+const gyro_cb_len::Integer = 5
 gyro_cb = CircularBuffer{Array{Float64,2}}(buffer_len)
 
 ##
