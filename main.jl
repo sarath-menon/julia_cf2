@@ -24,14 +24,8 @@ display(gui.fig)
 ##
 
 # create circular buffer to hold gyro data
-buffer_len = 5
+const gyro_cb_len::Int32 = 5
 gyro_cb = CircularBuffer{Array{Float64,2}}(buffer_len)
-
-include("logger_struct.jl")
-
-log_obj = LoggerStruct1("usb://0", pyimport("cflib"), pyimport("time"), pyimport("cflib.crazyflie"), pyimport("cflib.crazyflie.syncLogger"), pyimport("logging"))
-
-duration = 2
 
 ##
 include("tasks.jl")

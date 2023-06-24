@@ -1,5 +1,7 @@
+include("logger_struct.jl")
 
-duration = 3
+
+const duration_::Int32 = 3
 
 main_task = @task begin
 
@@ -11,7 +13,7 @@ main_task = @task begin
     # wait for data to become available in the channel
     wait(samples_channel)
 
-    count = duration * 1000
+    count = duration_ * 1000
 
     for i in 1:count
         sample = take!(samples_channel)
@@ -33,7 +35,10 @@ end
 
 cfread_task = @task begin
 
+
+    log_obj = LoggerStruct1("usb://0", pyimport("cflib"), pyimport("time"), pyimport("cflib.crazyflie"), pyimport("cflib.crazyflie.syncLogger"), pyimport("logging"))
+
     log_profiles = LogProfiles(log_obj.crazyflie.log.LogConfig(name="Stabilizer", period_in_ms=10))
     log_init(log_obj, log_profiles)
-    log_start(log_obj, log_profiles, duration)
+    log_start(log_obj, log_profiles, duration_)
 end

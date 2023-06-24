@@ -12,7 +12,7 @@ struct GuiData
     points_z::Observable{Vector{Point{2,Float32}}}
 end
 
-Gui = Gui3
+Gui = Gui2
 GuiData1 = GuiData
 
 function gui_init()
@@ -61,7 +61,7 @@ function gui_init()
 
 
 
-    gui = Gui(fig, ax1, ax2, ax3, x_range, points_x, points_y, points_z)
+    gui = Gui(fig, ax1, ax2, ax3, x_range)
 
     return gui
 end
