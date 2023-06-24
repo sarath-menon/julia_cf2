@@ -58,6 +58,27 @@ function gui_init()
 
     fig[4, 1] = buttongrid = GridLayout()
 
+    on(read_button.clicks) do n
+        println("Read button pressed")
+        # if read_flag[] == true
+        #     schedule(read_task, :STOP, error=true)
+        # end
+    end
+
+
+    on(log_button.clicks) do n
+        println("log button pressed")
+        # if log_flag[] == true
+        #     schedule(log_task, :STOP, error=true)
+        # end
+    end
+
+    on(clear_button.clicks) do n
+        empty!(ax1)
+        empty!(ax2)
+        empty!(ax3)
+    end
+
 
     # # for dynamically updating the axes
     # on(points) do point
