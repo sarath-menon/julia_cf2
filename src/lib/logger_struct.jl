@@ -14,9 +14,6 @@ end
 
 ##
 
-log_obj = LoggerStruct1("usb://0", pyimport("cflib"), pyimport("time"), pyimport("cflib.crazyflie"), pyimport("cflib.crazyflie.syncLogger"), pyimport("logging"))
-log_profiles = LogProfiles(log_obj.crazyflie.log.LogConfig(name="Stabilizer", period_in_ms=10))
-
 ##
 function log_init(log_obj::LoggerStruct1, log_profiles::LogProfiles)
 
