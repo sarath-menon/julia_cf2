@@ -42,7 +42,8 @@ function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, coun
 
     @pywith log_obj.crazyflie.syncLogger.SyncLogger(scf, log_profiles.lg_stab) as logger begin
 
-        count = 0
+        count::Int32 = 0
+        fps::Int32 = 1000
 
         for log_entry in logger
 
@@ -66,7 +67,7 @@ function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, coun
                 break
             end
 
-            fps = 1000
+
             # sleep(1 / fps)
         end
     end
