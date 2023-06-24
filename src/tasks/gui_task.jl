@@ -2,14 +2,16 @@
 
 include("./../lib/gui.jl")
 
+
+
 gui_task = @task begin
 
     ## initialize the gui
-    gui_handle = gui.gui_init()
-    gui_data = gui.reset_plot(gui_handle)
+    gui = gui_init()
+    gui_data = reset_plot(gui)
     fps::Integer = 1000
 
-    display(gui_handle.fig)
+    display(gui.fig)
 
     # wait for data to become available in the channel
     wait(gui_channel)

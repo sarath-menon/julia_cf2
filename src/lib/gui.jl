@@ -1,7 +1,3 @@
-module gui
-
-using GLMakie
-
 struct Gui3
     fig::Figure
     ax1::Axis
@@ -179,4 +175,3 @@ function plot_gyro(gui_data::GuiData, i::Integer, sample)
     gui_data.points_z[] = push!(gui_data.points_z[], [(i / 1000) sample[3]])
 end
 
-end
