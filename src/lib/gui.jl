@@ -45,6 +45,20 @@ function gui_init()
     points_y = Observable(Point2f[])
     points_z = Observable(Point2f[])
 
+    gui = Gui(fig, ax1, ax2, ax3, x_range)
+
+    # # add buttons
+    add_buttons!(gui)
+
+    display(fig)
+
+    return gui
+end
+
+function add_buttons!(gui::Gui)
+
+    fig = gui.fig
+
     # add buttons
     fig[4, 1] = buttongrid = GridLayout(tellwidth=false)
 
@@ -78,27 +92,6 @@ function gui_init()
         empty!(ax2)
         empty!(ax3)
     end
-
-
-    # # for dynamically updating the axes
-    # on(points) do point
-    #     x_right_limit = last(points.val)[1][1]
-    #     # x_right_limit = 50
-
-    #     if x_right_limit >= x_range
-    #         x_left_limit = x_right_limit - x_range
-    #     else
-    #         x_left_limit = 0
-    #     end
-
-    #     limits!(ax, x_left_limit, x_right_limit, -4, 4)
-    # end
-
-    display(fig)
-
-    gui = Gui(fig, ax1, ax2, ax3, x_range)
-
-    return gui
 end
 
 function reset_plot(gui::Gui)
