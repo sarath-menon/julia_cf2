@@ -9,6 +9,7 @@ gui_task = @task begin
     ## initialize the gui
     gui = gui_init()
     gui_data = reset_plot(gui)
+    fps::Integer = 1000
 
     # wait for data to become available in the channel
     wait(gui_channel)
@@ -18,11 +19,11 @@ gui_task = @task begin
     for i in 1:count
         sample = take!(gui_channel)
 
-        # if i % 10 == 0
-        plot_gyro(gui_data, i, sample)
-        # end
+        # println("plotting data")
 
-        # sleep(1 / task_rate)
+        plot_gyro(gui_data, i, sample)
+
+        sleep(1 / fps)
     end
 
 
