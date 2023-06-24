@@ -18,7 +18,7 @@ GLMakie.activate!(inline=false)
 include("src/tasks/onetime_tasks.jl")
 include("src/tasks/socket_task.jl")
 
-schedule(gui_task)
+# schedule(gui_task)
 schedule(socket_task)
 
 
