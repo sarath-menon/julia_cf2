@@ -87,7 +87,7 @@ function reset_plot(gui::Gui)
     return gui_data
 end
 
-function plot_gyro(gui_data::GuiData, i, sample)
+function plot_gyro(gui_data::GuiData, i::Integer, sample)
     # push data to plot buffer
     gui_data.points_x[] = push!(gui_data.points_x[], [(i / 1000) sample[1]])
     gui_data.points_y[] = push!(gui_data.points_y[], [(i / 1000) sample[2]])

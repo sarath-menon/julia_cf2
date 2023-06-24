@@ -37,7 +37,7 @@ end
 
 
 # setter function 
-function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, count_max)
+function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, count_max::Integer)
 
 
     @pywith log_obj.crazyflie.syncLogger.SyncLogger(scf, log_profiles.lg_stab) as logger begin
@@ -75,7 +75,7 @@ end
 
 
 
-function log_start(log_obj::LoggerStruct1, log_profiles::LogProfiles, duration)
+function log_start(log_obj::LoggerStruct1, log_profiles::LogProfiles, duration::Integer)
 
     count_max = duration * 1000
 
