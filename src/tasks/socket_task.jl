@@ -4,9 +4,10 @@ include("./../lib/socket_udp.jl")
 
 using Sockets
 using Serialization
-include("comm_utils.jl")
 
-socket_task = @task begin
+
+# socket_task = @task begin
+@tspawnat 2 begin
 
     socket_profile::SocketProfile = socket_init()
     # recdata()
@@ -26,7 +27,12 @@ socket_task = @task begin
             break
         end
 
-        println("Data received:", msg)
+        println(typeof(msg))
+
+        # println("Data received:", msg)
+
+        # push data to data buffer
+        put!(data_channel, msg)
     end
 
     socket_close(socket_profile)

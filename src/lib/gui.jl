@@ -183,10 +183,18 @@ function reset_plot(gui::Gui)
     return gui_data
 end
 
-function plot_gyro(gui_data::GuiData, i::Integer, sample)
+# function plot_gyro(gui_data::GuiData, i::Integer, sample)
+#     # push data to plot buffer
+#     gui_data.points_x[] = push!(gui_data.points_x[], [(i / 1000) sample[1]])
+#     gui_data.points_y[] = push!(gui_data.points_y[], [(i / 1000) sample[2]])
+#     gui_data.points_z[] = push!(gui_data.points_z[], [(i / 1000) sample[3]])
+# end
+
+
+function plot_gyro(gui_data::GuiData, i::Integer, msg::GyroData)
     # push data to plot buffer
-    gui_data.points_x[] = push!(gui_data.points_x[], [(i / 1000) sample[1]])
-    gui_data.points_y[] = push!(gui_data.points_y[], [(i / 1000) sample[2]])
-    gui_data.points_z[] = push!(gui_data.points_z[], [(i / 1000) sample[3]])
+    gui_data.points_x[] = push!(gui_data.points_x[], [(i / 1000) msg.ẋ])
+    gui_data.points_y[] = push!(gui_data.points_y[], [(i / 1000) msg.ẏ])
+    gui_data.points_z[] = push!(gui_data.points_z[], [(i / 1000) msg.ż])
 end
 

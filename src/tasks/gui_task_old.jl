@@ -13,22 +13,16 @@ gui_task = @task begin
 
     display(gui.fig)
 
-    # # wait for data to become available in the channel
-    # wait(data_channel)
+    # wait for data to become available in the channel
+    wait(gui_channel)
 
-    duration = 5
     count = duration * 1000000
 
-
-
     for i in 1:count
-        println("Waiting for data in gui:")
+        sample = take!(gui_channel)
 
-        sample::GyroData1 = take!(data_channel)
+        # println("plotting data")
 
-        println("Data received $(i) :", sample)
-
-        println("plotting data")
         plot_gyro(gui_data, i, sample)
 
         sleep(1 / fps)

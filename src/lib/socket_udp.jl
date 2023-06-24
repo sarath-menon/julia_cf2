@@ -1,3 +1,4 @@
+
 struct SocketProfile1
     ip_address::IPv4
     port::Int
@@ -54,46 +55,46 @@ function socket_close(socket_profile::SocketProfile)
     close(sock)
 end
 
-function recdata(port=4444)
-    # # get ip address of host
-    # ip_address = getipaddr()
-    # port = 4444
+# function recdata(port=4444)
+#     # # get ip address of host
+#     # ip_address = getipaddr()
+#     # port = 4444
 
-    # println("IP Address: ", ip_address)
+#     # println("IP Address: ", ip_address)
 
-    # sock = UDPSocket()
+#     # sock = UDPSocket()
 
-    # # IObuffer function to convert object to byte streams
-    # io = IOBuffer()
+#     # # IObuffer function to convert object to byte streams
+#     # io = IOBuffer()
 
-    # ret = bind(sock, ip_address, port)
+#     # ret = bind(sock, ip_address, port)
 
-    # if ret == false
-    #     println("Could not bind to socket !")
-    #     return
-    # end
+#     # if ret == false
+#     #     println("Could not bind to socket !")
+#     #     return
+#     # end
 
-    println("Waiting for data")
+#     println("Waiting for data")
 
-    while true
+#     while true
 
 
-        pck = recv(sock)
+#         pck = recv(sock)
 
-        # Deserialize function takes stream as parameter
-        msg = deserialize(IOBuffer(pck))
+#         # Deserialize function takes stream as parameter
+#         msg = deserialize(IOBuffer(pck))
 
-        # shutdown the receiver is exit msg is received
-        if msg == :exit
-            println("Shutting down receiver")
-            break
-        end
+#         # shutdown the receiver is exit msg is received
+#         if msg == :exit
+#             println("Shutting down receiver")
+#             break
+#         end
 
-        println("Data received:", msg)
-    end
+#         println("Data received:", msg)
+#     end
 
-    print("Closing port")
-    close(sock)
-end
+#     print("Closing port")
+#     close(sock)
+# end
 
 

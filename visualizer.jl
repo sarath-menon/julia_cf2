@@ -12,14 +12,24 @@ using GLMakie
 using ThreadPools
 using DSP
 
+using Sockets
+using Serialization
+
+
 GLMakie.activate!(inline=false)
 ##
 
-include("src/tasks/onetime_tasks.jl")
-include("src/tasks/socket_task.jl")
+include("src/tasks/comm_utils.jl")
 
-# schedule(gui_task)
-schedule(socket_task)
+
+data_channel = Channel{GyroData1}(100);
+
+
+include("src/tasks/socket_task.jl")
+include("src/tasks/onetime_tasks.jl")
+
+schedule(gui_task)
+# schedule(socket_task)
 
 
 
