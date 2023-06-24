@@ -158,6 +158,21 @@ function reset_plot(gui::Gui)
     points_y = Observable(Point2f[])
     points_z = Observable(Point2f[])
 
+    x_range = 0.2
+
+    on(points_x) do point
+        x_right_limit = last(points_x.val)[1][1]
+
+        if x_right_limit >= x_range
+            x_left_limit = x_right_limit - x_range
+        else
+            x_left_limit = 0
+        end
+
+        limits!(gui.ax1, x_left_limit, x_right_limit, -4, 4)
+    end
+
+
     gui_data = GuiData(points_x, points_y, points_z)
 
     # # add line plot
