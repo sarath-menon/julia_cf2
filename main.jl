@@ -16,6 +16,9 @@ include("gui.jl")
 
 gui = gui_init()
 
+# screen = Gtk4Makie.GTKScreen(resolution=(800, 800))
+# display(screen, gui.fig)
+
 display(gui.fig)
 
 ##
