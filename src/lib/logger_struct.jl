@@ -12,8 +12,6 @@ struct LogProfiles
     lg_stab::PyObject
 end
 
-samples_channel = Channel{Matrix{Float64}}(100);
-
 ##
 
 log_obj = LoggerStruct1("usb://0", pyimport("cflib"), pyimport("time"), pyimport("cflib.crazyflie"), pyimport("cflib.crazyflie.syncLogger"), pyimport("logging"))

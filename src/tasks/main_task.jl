@@ -1,14 +1,14 @@
 
 
-include("./../lib/gui.jl")
+# include("./../lib/gui.jl")
 
 
 
 main_task = @task begin
 
-    ## initialize the gui
-    gui = gui_init()
-    gui_data = reset_plot(gui)
+    # ## initialize the gui
+    # gui = gui_init()
+    # gui_data = reset_plot(gui)
 
 
     task_rate = 1000 #hz
@@ -31,8 +31,9 @@ main_task = @task begin
         # push data to circular buffer
         push!(gyro_cb, sample)
 
+        # push data to gui channel
         if i % 10 == 0
-            plot_gyro(gui_data, i, sample)
+            put!(gui_channel, sample)
         end
 
         # sleep(1 / task_rate)

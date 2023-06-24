@@ -13,6 +13,10 @@ using GLMakie
 GLMakie.activate!(inline=false)
 ##
 
+include("src/tasks/onetime_tasks.jl")
+schedule(gui_task)
+
+##
 include("src/tasks/tasks.jl")
 
 schedule(cfread_task)
