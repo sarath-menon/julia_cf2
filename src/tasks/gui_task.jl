@@ -24,7 +24,7 @@ gui_task = @task begin
     for i in 1:count
         println("Waiting for data in gui:")
 
-        sample::GyroData1 = take!(data_channel)
+        sample::GyroData = take!(data_channel)
 
         println("Data received $(i) :", sample)
 

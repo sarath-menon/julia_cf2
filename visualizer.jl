@@ -22,7 +22,7 @@ GLMakie.activate!(inline=false)
 include("src/tasks/comm_utils.jl")
 
 
-data_channel = Channel{GyroData1}(100);
+data_channel = Channel{GyroData}(100);
 
 
 include("src/tasks/socket_task.jl")
