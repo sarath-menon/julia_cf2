@@ -11,6 +11,8 @@ gui_task = @task begin
     gui_data = reset_plot(gui)
     fps::Integer = 1000
 
+    display(gui.fig)
+
     # wait for data to become available in the channel
     wait(gui_channel)
 

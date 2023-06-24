@@ -49,48 +49,61 @@ function gui_init()
 
     # add widgets
     add_buttons!(gui)
+    add_toggle!(gui)
     add_dropdown_menu!(gui)
 
-    display(fig)
+
 
     return gui
+end
+
+function add_toggle!(gui::Gui)
+
+    fig = gui.fig
+
+    toggles = [Toggle(fig, active=active, height=40, width=80) for active in [true, false]]
+    labels = [Label(fig, lift(x -> x ? "$l visible" : "$l invisible", t.active), fontsize=30)
+              for (t, l) in zip(toggles, ["sine", "cosine"])]
+
+    fig[1, 2] = grid!(hcat(toggles, labels), tellheight=false)
+
 end
 
 function add_dropdown_menu!(gui::Gui)
 
     fig = gui.fig
 
-    function func1(x)
-        println("func 1")
-        return x
-    end
+    # function func1(x)
+    #     println("func 1")
+    #     return x
+    # end
 
-    function func2(x)
-        println("func 2")
-        return 2 * x
-    end
-
-
-    funcs = [func1, func2]
-
-    menu = Menu(fig[4, 2],
-        options=zip(["Raw gyro", "IIR Filtered"], funcs),
-        default="Raw gyro", fontsize=30)
-
-    func = Observable{Any}(funcs[1])
-
-    ys = lift(func) do f
-        f.(0:0.3:10)
-    end
+    # function func2(x)
+    #     println("func 2")
+    #     return 2 * x
+    # end
 
 
-    on(menu.selection) do s
-        func[] = s
-        println(s)
+    # funcs = [func1, func2]
 
-    end
+    # menu = Menu(fig[4, 2],
+    #     options=zip(["Raw gyro", "IIR Filtered"], funcs),
+    #     default="Raw gyro", fontsize=30)
 
-    notify(menu.selection)
+    # func = Observable{Any}(funcs[1])
+
+    # ys = lift(func) do f
+    #     f.(0:0.3:10)
+    # end
+
+
+    # on(menu.selection) do s
+    #     func[] = s
+    #     println(s)
+
+    # end
+
+    # notify(menu.selection)
 
 
 end
