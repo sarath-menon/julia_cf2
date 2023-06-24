@@ -16,16 +16,13 @@ include("gui.jl")
 
 gui = gui_init()
 
-# screen = Gtk4Makie.GTKScreen(resolution=(800, 800))
-# display(screen, gui.fig)
 
-display(gui.fig)
 
 ##
 
 # create circular buffer to hold gyro data
 const gyro_cb_len::Integer = 5
-gyro_cb = CircularBuffer{Array{Float64,2}}(buffer_len)
+gyro_cb = CircularBuffer{Array{Float64,2}}(gyro_cb_len)
 
 ##
 include("tasks.jl")

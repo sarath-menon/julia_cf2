@@ -1,7 +1,7 @@
 include("logger_struct.jl")
 
 
-const duration_::Integer = 3
+const duration::Integer = 3
 
 main_task = @task begin
 
@@ -13,7 +13,7 @@ main_task = @task begin
     # wait for data to become available in the channel
     wait(samples_channel)
 
-    count = duration_ * 1000
+    count = duration * 1000
 
     for i in 1:count
         sample = take!(samples_channel)
@@ -40,5 +40,5 @@ cfread_task = @task begin
 
     log_profiles = LogProfiles(log_obj.crazyflie.log.LogConfig(name="Stabilizer", period_in_ms=10))
     log_init(log_obj, log_profiles)
-    log_start(log_obj, log_profiles, duration_)
+    log_start(log_obj, log_profiles, duration)
 end

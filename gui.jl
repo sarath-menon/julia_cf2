@@ -1,4 +1,4 @@
-struct Gui2
+struct Gui3
     fig::Figure
     ax1::Axis
     ax2::Axis
@@ -12,7 +12,7 @@ struct GuiData
     points_z::Observable{Vector{Point{2,Float32}}}
 end
 
-Gui = Gui2
+Gui = Gui3
 GuiData1 = GuiData
 
 function gui_init()
@@ -59,7 +59,7 @@ function gui_init()
     #     limits!(ax, x_left_limit, x_right_limit, -4, 4)
     # end
 
-
+    display(fig)
 
     gui = Gui(fig, ax1, ax2, ax3, x_range)
 
