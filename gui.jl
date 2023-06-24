@@ -45,6 +45,20 @@ function gui_init()
     points_y = Observable(Point2f[])
     points_z = Observable(Point2f[])
 
+    # add buttons
+    fig[4, 1] = buttongrid = GridLayout(tellwidth=false)
+
+    read_button = Button(fig, label="Stop Reading", fontsize=30, tellwidth=false, halign=:center)
+    log_button = Button(fig, label="Stop logging", fontsize=30, tellwidth=false, halign=:center)
+    clear_button = Button(fig, label="Clear plot", fontsize=30, tellwidth=false, halign=:center)
+
+    buttongrid[1, 1] = read_button
+    buttongrid[1, 2] = log_button
+    buttongrid[1, 3] = clear_button
+
+    fig[4, 1] = buttongrid = GridLayout()
+
+
     # # for dynamically updating the axes
     # on(points) do point
     #     x_right_limit = last(points.val)[1][1]
