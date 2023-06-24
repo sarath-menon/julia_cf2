@@ -47,12 +47,52 @@ function gui_init()
 
     gui = Gui(fig, ax1, ax2, ax3, x_range)
 
-    # # add buttons
+    # add widgets
     add_buttons!(gui)
+    add_dropdown_menu!(gui)
 
     display(fig)
 
     return gui
+end
+
+function add_dropdown_menu!(gui::Gui)
+
+    fig = gui.fig
+
+    function func1(x)
+        println("func 1")
+        return x
+    end
+
+    function func2(x)
+        println("func 2")
+        return 2 * x
+    end
+
+
+    funcs = [func1, func2]
+
+    menu = Menu(fig[4, 2],
+        options=zip(["Raw gyro", "IIR Filtered"], funcs),
+        default="Raw gyro", fontsize=30)
+
+    func = Observable{Any}(funcs[1])
+
+    ys = lift(func) do f
+        f.(0:0.3:10)
+    end
+
+
+    on(menu.selection) do s
+        func[] = s
+        println(s)
+
+    end
+
+    notify(menu.selection)
+
+
 end
 
 function add_buttons!(gui::Gui)
