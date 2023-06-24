@@ -4,7 +4,8 @@
 
 
 
-main_task = @task begin
+# main_task = @task begin
+@tspawnat 3 begin
 
     # ## initialize the gui
     # gui = gui_init()
