@@ -10,6 +10,7 @@ using Printf
 using DataStructures
 using GLMakie
 using ThreadPools
+using DSP
 
 GLMakie.activate!(inline=false)
 ##
@@ -21,7 +22,7 @@ schedule(gui_task)
 include("src/tasks/tasks.jl")
 
 schedule(cfread_task)
-# schedule(main_task)
+schedule(main_task)
 
 
 
