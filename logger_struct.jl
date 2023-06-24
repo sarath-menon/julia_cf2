@@ -1,5 +1,3 @@
-using Base.Threads
-
 struct LoggerStruct1
     uri::String
     # package imports
@@ -14,8 +12,7 @@ struct LogProfiles
     lg_stab::PyObject
 end
 
-samples_channel = Channel(100);
-# buffer_channel = Channel{CircularBuffer{Matrix{Float64}}}(1)
+samples_channel = Channel{Matrix{Float64}}(100);
 
 ##
 
@@ -25,17 +22,6 @@ log_profiles = LogProfiles(log_obj.crazyflie.log.LogConfig(name="Stabilizer", pe
 ##
 function log_init(log_obj::LoggerStruct1, log_profiles::LogProfiles)
 
-    # self.uri = uri
-    # # package imports
-    # self.cflib = pyimport("cflib")
-    # self.time = pyimport("time")
-
-    # self.crazyflie = pyimport("cflib.crazyflie")
-    # self.log = pyimport("cflib.crazyflie.log")
-    # self.syncLogger = pyimport("cflib.crazyflie.syncLogger")
-
-    # Only output errors from the logging framework
-    # logging = pyimport("logging")
     log_obj.logging.basicConfig(level=log_obj.logging.ERROR)
 
 
@@ -46,12 +32,8 @@ function log_init(log_obj::LoggerStruct1, log_profiles::LogProfiles)
     log_profiles.lg_stab.add_variable("gyro_unfiltered.x", "float")
     log_profiles.lg_stab.add_variable("gyro_unfiltered.y", "float")
     log_profiles.lg_stab.add_variable("gyro_unfiltered.z", "float")
-    # # test
-    # self.x = 4
+
 end
-
-##
-
 
 
 # setter function 
@@ -61,7 +43,6 @@ function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, coun
     @pywith log_obj.crazyflie.syncLogger.SyncLogger(scf, log_profiles.lg_stab) as logger begin
 
         count = 0
-        # count_max = 1000
 
         for log_entry in logger
 
