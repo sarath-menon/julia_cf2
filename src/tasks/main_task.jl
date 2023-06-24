@@ -1,12 +1,22 @@
-include("logger_struct.jl")
 
 
-const duration::Integer = 3
+include("./../lib/gui.jl")
+
+
 
 main_task = @task begin
 
+    ## initialize the gui
+    gui = gui_init()
     gui_data = reset_plot(gui)
+
+
     task_rate = 1000 #hz
+
+    # create circular buffer to hold gyro data
+
+    gyro_cb = CircularBuffer{Array{Float64,2}}(gyro_cb_len)
+
 
     println("Waiting to receive samples from channel")
 
@@ -33,12 +43,3 @@ end
 
 
 
-cfread_task = @task begin
-
-
-    log_obj = LoggerStruct1("usb://0", pyimport("cflib"), pyimport("time"), pyimport("cflib.crazyflie"), pyimport("cflib.crazyflie.syncLogger"), pyimport("logging"))
-
-    log_profiles = LogProfiles(log_obj.crazyflie.log.LogConfig(name="Stabilizer", period_in_ms=10))
-    log_init(log_obj, log_profiles)
-    log_start(log_obj, log_profiles, duration)
-end
