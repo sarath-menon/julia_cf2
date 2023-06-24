@@ -52,7 +52,7 @@ end
 
 function socket_close(socket_profile::SocketProfile)
     print("Closing port")
-    close(sock)
+    close(socket_profile.udp_socket)
 end
 
 # function recdata(port=4444)
