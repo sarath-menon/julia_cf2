@@ -1,6 +1,6 @@
-include("./../lib/logger_struct.jl")
+include("logger_struct.jl")
 
-function cfread_task_func(samples_channel::Channel)
+function cfread_task_func(samples_channel::Channel, duration::Int64)
 
     cfread_task = @async begin
 

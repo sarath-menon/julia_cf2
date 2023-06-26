@@ -46,16 +46,17 @@ function main_task(samples_channel::Channel)
             sample = take!(samples_channel)
 
             # push data to circular buffer
-            push!(gyro_cb, sample[1])
+            push!(gyro_cb, sample.ẋ)
 
             # apply flilter to data in circular buffer
             gyro_filtered_x = filt(chebyshev_filter, gyro_cb.buffer)
 
             # println("Gyro x:", sample[1])
-            println("Index", i)
+            # println("Index", i)
+            println("Timestamp: ", sample.timestamp)
 
-            state = GyroData(i, sample[1], sample[2], sample[3])
-            serialize(io, state)
+            # state = GyroData(i, sample[1], sample[2], sample[3])
+            serialize(io, sample)
 
             # send_data(take!(io))
 
@@ -63,7 +64,7 @@ function main_task(samples_channel::Channel)
 
 
             # send data to gui channel
-            if i % 100 == 0
+            if i % 10 == 0
                 data = take!(io)
                 ret = send(soc, ip_address, port, data)
                 if ret == false

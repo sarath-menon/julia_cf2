@@ -1,3 +1,6 @@
+
+include("socket_udp.jl")
+
 struct LoggerStruct1
     uri::String
     # package imports
@@ -46,15 +49,15 @@ function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, coun
             data = log_entry[2]
             logconf_name = log_entry[3]
 
-            # print("Timestamp: ", timestamp)
+            println("Timestamp: ", timestamp)
             # @printf "   Raw gyro: %.3f    %.3f    %.3f" data["gyro_unfiltered.x"] data["gyro_unfiltered.y"] data["gyro_unfiltered.z"]
             # println("")
 
             # push data to channel
-            sample = [data["gyro_unfiltered.x"] data["gyro_unfiltered.y"] data["gyro_unfiltered.z"]]
+            sample = GyroData(timestamp, data["gyro_unfiltered.x"], data["gyro_unfiltered.y"], data["gyro_unfiltered.z"])
 
-            # println("Waiting for channel to be read)
-            put!(samples_channel, sample)
+
+            # put!(samples_channel, sample)
 
             count += 1
 
