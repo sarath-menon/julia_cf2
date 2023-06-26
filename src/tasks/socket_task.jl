@@ -27,9 +27,7 @@ using Serialization
             break
         end
 
-        println(typeof(msg))
-
-        # println("Data received:", msg)
+        println("Data received:", msg)
 
         # push data to data buffer
         put!(data_channel, msg)

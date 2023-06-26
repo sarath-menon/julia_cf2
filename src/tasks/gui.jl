@@ -167,7 +167,7 @@ function reset_plot(gui::Gui)
     points_y = Observable(Point2f[])
     points_z = Observable(Point2f[])
 
-    x_range = 10
+    x_range = 20
     on(points_x) do point
         x_right_limit = last(points_x.val)[1][1]
 
@@ -201,9 +201,9 @@ end
 
 function plot_gyro(gui_data, i, msg)
     # push data to plot buffer
-    gui_data.points_x[] = push!(gui_data.points_x[], [(i / 1000) msg.ẋ])
-    gui_data.points_y[] = push!(gui_data.points_y[], [(i / 1000) msg.ẏ])
-    gui_data.points_z[] = push!(gui_data.points_z[], [(i / 1000) msg.ż])
+    gui_data.points_x[] = push!(gui_data.points_x[], [i msg.ẋ])
+    gui_data.points_y[] = push!(gui_data.points_y[], [i msg.ẏ])
+    gui_data.points_z[] = push!(gui_data.points_z[], [i msg.ż])
 end
 
 end

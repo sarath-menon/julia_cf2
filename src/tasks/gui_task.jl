@@ -1,52 +1,38 @@
+include("./../lib/gui.jl")
 
-
-include("gui.jl")
-
-# using .gui
-import .gui
-
-
-function plot_gyro1(gui_data, i, msg)
-    # push data to plot buffer
-    gui_data.points_x[] = push!(gui_data.points_x[], [(i / 1000) msg.ẋ])
-    gui_data.points_y[] = push!(gui_data.points_y[], [(i / 1000) msg.ẏ])
-    gui_data.points_z[] = push!(gui_data.points_z[], [(i / 1000) msg.ż])
-end
 
 
 gui_task = @task begin
 
     ## initialize the gui
-    gui_task_handle::gui.Gui = gui.gui_init()
-    gui_data::gui.GuiData = gui.reset_plot(gui_task_handle)
+    gui = gui_init()
+    gui_data = reset_plot(gui)
     fps::Integer = 1000
 
-    display(gui_task_handle.fig)
+    display(gui.fig)
 
     # # wait for data to become available in the channel
     # wait(data_channel)
 
     duration = 5
-    count = duration * 1000000
+    count = duration * 1000
+    println("Waiting for data in gui:")
 
 
 
-    for i in 1:count
-        println("Waiting for data in gui:")
+    for i in 1:1:count
+
 
         sample::GyroData = take!(data_channel)
 
-        println("Data received $(i) :", sample)
+        print("Index :", i)
 
-        println("plotting data")
-        # plot_gyro1(gui_data, i, sample)
-        # gui.plot_gyro(gui_data, i, sample)
+        # println("Data received :", sample.ẋ)
 
-        gui_data.points_x[] = push!(gui_data.points_x[], [(i) sample.ẋ])
-        gui_data.points_y[] = push!(gui_data.points_y[], [(i) sample.ẏ])
-        gui_data.points_z[] = push!(gui_data.points_z[], [(i) sample.ż])
+        # println("plotting data")
+        plot_gyro(gui_data, i, sample)
 
-        # sleep(1 / fps)
+        sleep(1 / fps)
     end
 
 

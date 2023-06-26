@@ -1,7 +1,7 @@
 
 import Pkg;
 Pkg.activate(@__DIR__);
-Pkg.instantiate();
+
 
 ##
 using Revise
@@ -28,8 +28,9 @@ data_channel = Channel{GyroData}(100);
 include("src/tasks/socket_task.jl")
 include("src/tasks/onetime_tasks.jl")
 
-schedule(gui_task)
 # schedule(socket_task)
+schedule(gui_task)
+
 
 
 
