@@ -29,6 +29,8 @@ include("src/tasks/socket_task.jl")
 include("src/tasks/onetime_tasks.jl")
 
 # schedule(socket_task)
+socket_task_func(data_channel)
+
 gui_task = gui_task_func(data_channel)
 schedule(gui_task)
 
