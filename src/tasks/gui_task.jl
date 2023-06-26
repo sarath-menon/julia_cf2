@@ -1,9 +1,9 @@
-# module gui_task_
+module gui_task_
 
 using GLMakie
 GLMakie.activate!(inline=false)
 
-include("comm_utils.jl")
+include("./../tasks/comm_utils.jl")
 include("./../lib/gui.jl")
 
 function gui_task_func(data_channel::Channel)
@@ -47,5 +47,5 @@ function gui_task_func(data_channel::Channel)
     return gui_task
 
 end
-# end
+end
 
