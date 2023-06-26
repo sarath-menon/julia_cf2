@@ -3,7 +3,7 @@
 using GLMakie
 GLMakie.activate!(inline=false)
 
-include("./../tasks/comm_utils.jl")
+# include("./../tasks/comm_utils.jl")
 include("./../lib/gui.jl")
 
 function gui_task_func(data_channel::Channel)
