@@ -1,4 +1,4 @@
-module gui_task_
+# module gui_task_
 
 using GLMakie
 GLMakie.activate!(inline=false)
@@ -47,5 +47,5 @@ function gui_task_func(data_channel::Channel)
     return gui_task
 
 end
-end
+# end
 
