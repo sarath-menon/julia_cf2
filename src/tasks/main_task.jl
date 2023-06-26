@@ -1,4 +1,6 @@
 
+include("socket_udp.jl")
+
 function main_task(samples_channel::Channel)
 
     # main_task = @task begin
@@ -31,6 +33,10 @@ function main_task(samples_channel::Channel)
 
         count = duration * 1000
 
+
+        io = IOBuffer()
+
+
         for i in 1:count
             sample = take!(samples_channel)
 
@@ -41,6 +47,10 @@ function main_task(samples_channel::Channel)
             gyro_filtered_x = filt(chebyshev_filter, gyro_cb.buffer)
 
             println("Gyro x:", sample[1])
+
+            state = GyroData(i, sample[1], sample[2], sample[3])
+            serialize(io, state)
+            send_data(take!(io))
 
 
             # # push data to gui channel
