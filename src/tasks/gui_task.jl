@@ -8,7 +8,7 @@ include("./../lib/gui.jl")
 
 function gui_task_func(data_channel::Channel)
 
-    gui_task = @task begin
+    gui_task = @async begin
 
         ## initialize the gui
         gui = gui_init()

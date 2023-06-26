@@ -32,7 +32,7 @@ include("src/tasks/onetime_tasks.jl")
 socket_task_func(data_channel)
 
 gui_task = gui_task_func(data_channel)
-schedule(gui_task)
+
 
 
 
