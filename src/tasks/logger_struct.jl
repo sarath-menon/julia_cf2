@@ -37,11 +37,18 @@ end
 # setter function 
 function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, count_max::Integer)
 
+    # get ip address of host
+    ip_address = getipaddr()
+    soc = UDPSocket()
+    io = IOBuffer()
+    port = 4444
 
     @pywith log_obj.crazyflie.syncLogger.SyncLogger(scf, log_profiles.lg_stab) as logger begin
 
         count::Integer = 0
         fps::Integer = 1000
+
+
 
         for log_entry in logger
 
@@ -49,15 +56,39 @@ function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, coun
             data = log_entry[2]
             logconf_name = log_entry[3]
 
-            println("Timestamp: ", timestamp)
+            # Core.println("Pushed Timestamp: ", timestamp)
             # @printf "   Raw gyro: %.3f    %.3f    %.3f" data["gyro_unfiltered.x"] data["gyro_unfiltered.y"] data["gyro_unfiltered.z"]
             # println("")
 
-            # push data to channel
+
             sample = GyroData(timestamp, data["gyro_unfiltered.x"], data["gyro_unfiltered.y"], data["gyro_unfiltered.z"])
+
+            # send data to gui
+            serialize(io, sample)
+            data = take!(io)
+            ret = send(soc, ip_address, port, data)
+
+            if ret == false
+                println("Could not send data !")
+            end
 
 
             # put!(samples_channel, sample)
+            # push data to circular buffer
+            # lock(lk) do
+            #     push!(task_cb, sample.ẋ)
+            # end
+            # unlock(lk)
+
+            begin
+                lock(lk)
+                try
+                    push!(task_cb, sample)
+                    push!(gyro_cb, sample.ẋ)
+                finally
+                    unlock(lk)
+                end
+            end
 
             count += 1
 
@@ -69,6 +100,8 @@ function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, coun
             # sleep(1 / fps)
         end
     end
+    Core.println("Crazyflie done publishing !")
+
 end
 
 

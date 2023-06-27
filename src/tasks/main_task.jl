@@ -21,7 +21,7 @@ function main_task(samples_channel::Channel)
 
         # create circular buffer to hold gyro data
 
-        gyro_cb = CircularBuffer{Float64}(gyro_cb_len)
+        # gyro_cb = CircularBuffer{Float64}(gyro_cb_len)
         # gyro_cb = CircularBuffer{Float64}(gyro_cb_len)
         # gyro_cb = CircularBuffer{Float64}(gyro_cb_len)
 
@@ -41,39 +41,71 @@ function main_task(samples_channel::Channel)
         io = IOBuffer()
         port = 4444
 
+        timestamp::Int64 = 0
+
 
         for i in 1:count
-            sample = take!(samples_channel)
+            # sample = take!(samples_channel)
+            # lock(lk) do
+            #     sample = pop!(task_cb)
+            # end
 
-            # push data to circular buffer
-            push!(gyro_cb, sample.ẋ)
 
-            # apply flilter to data in circular buffer
-            gyro_filtered_x = filt(chebyshev_filter, gyro_cb.buffer)
+
+            begin
+                # Core.println("Waiting to lock")
+                lock(lk)
+                try
+                    sample = popfirst!(task_cb)
+                    timestamp = sample.timestamp
+                    # Core.println("Popped Timestamp $(i): ", sample.timestamp)
+
+                    # apply flilter to data in circular buffer
+                    # gyro_filtered_x = filt(chebyshev_filter, task_cb.buffer)
+
+                    # println("Filtered : ", gyro_filtered_x)
+
+                    gyro_filtered_x = filt(chebyshev_filter, gyro_cb.buffer)
+
+                    # println("Filtered $(sample.timestamp): ", gyro_filtered_x[5])
+                    println("Filtered $(timestamp): ", gyro_filtered_x[5])
+
+                finally
+                    unlock(lk)
+                end
+            end
+
+
+            # # pop latest data from circular buffer
+
+            # # push data to circular buffer
+            # push!(gyro_cb, sample.ẋ)
+
+
 
             # println("Gyro x:", sample[1])
             # println("Index", i)
-            println("Timestamp: ", sample.timestamp)
 
-            # state = GyroData(i, sample[1], sample[2], sample[3])
-            serialize(io, sample)
+
+            # # state = GyroData(i, sample[1], sample[2], sample[3])
+            # serialize(io, sample)
 
             # send_data(take!(io))
 
 
 
 
-            # send data to gui channel
-            if i % 10 == 0
-                data = take!(io)
-                ret = send(soc, ip_address, port, data)
-                if ret == false
-                    println("Could not send data !")
-                end
+            # # send data to gui channel
+            # if i % 10 == 0
+            #     data = take!(io)
+            #     ret = send(soc, ip_address, port, data)
+            #     if ret == false
+            #         println("Could not send data !")
+            #     end
 
-            end
+            # end
 
-            # sleep(1 / task_rate)
+            sleep(1 / task_rate)
         end
 
         # # to shutdown gui receiver
