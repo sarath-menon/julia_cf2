@@ -18,9 +18,9 @@ GLMakie.activate!(inline=false)
 ##
 include("src/tasks/comm_utils.jl")
 
-const duration::Integer = 3
-const gyro_cb_len::Integer = 5
-const acc_cb_len::Integer = 5
+const duration::Integer = 3;
+const gyro_cb_len::Integer = 5;
+const acc_cb_len::Integer = 5;
 
 samples_channel = Channel{ImuData}(100);
 

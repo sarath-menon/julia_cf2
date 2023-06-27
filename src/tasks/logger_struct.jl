@@ -133,6 +133,19 @@ function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, coun
 
             end
 
+            if count % 100 == 0
+
+                serialize(io, imu_data)
+                data = take!(io)
+
+                ret = send(soc, ip_address, port, data)
+                if ret == false
+                    Core.println("Could not send data !")
+                end
+
+                println("sent to gui")
+            end
+
             count += 1
 
             if count == count_max
@@ -144,6 +157,7 @@ function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, coun
         end
     end
     Core.println("Crazyflie done publishing !")
+    close(soc)
 
 end
 
