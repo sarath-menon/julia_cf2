@@ -19,8 +19,12 @@ function estimator_task(samples_channel::Channel)
             sample = take!(samples_channel)
             # Core.println("Popped Timestamp $(i): ", sample.timestamp)
 
-            Core.println("Accel x $(sample.timestamp): ", sample.acc.x)
-            Core.println("Gyro x y z $(sample.timestamp): ", sample.gyro.ẋ)
+            Core.println("Accel $(sample.timestamp): $(sample.acc.x) $(sample.acc.y) $(sample.acc.z) ")
+            Core.println("Gyro $(sample.timestamp): $(sample.gyro.ẋ) $(sample.gyro.ẏ) $(sample.gyro.ż) ")
+
+            # @printf "Raw accel %d: %.3f    %.3f    %.3f \n" sample.timestamp sample.acc.x sample.acc.y sample.acc.z
+            # @printf "Raw gyro %d: %.3f    %.3f    %.3f \n" sample.timestamp sample.gyro.ẋ sample.gyro.ẏ sample.gyro.ż
+
             # sleep(1 / task_rate)
         end
 
