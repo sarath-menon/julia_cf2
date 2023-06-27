@@ -25,13 +25,12 @@ lk = ReentrantLock()
 samples_channel = Channel{GyroData}(100);
 
 task_cb = CircularBuffer{GyroData}(5)
-gyro_cb = CircularBuffer{Float64}(5)
 
 include("src/tasks/tasks.jl")
 
 
 
-cfread_task_func(samples_channel, 10)
+cfread_task_func(samples_channel, 5)
 main_task(samples_channel)
 
 ##

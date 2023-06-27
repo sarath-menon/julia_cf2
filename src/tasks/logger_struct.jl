@@ -58,7 +58,9 @@ function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, coun
     gyro_cb_y = CircularBuffer{Float64}(gyro_cb_len)
     gyro_cb_z = CircularBuffer{Float64}(gyro_cb_len)
 
-    gyro_filtered_x = Array{Float64}(undef, 5)
+    gyro_filtered_x = Array{Float64}(undef, gyro_cb_len)
+    gyro_filtered_x = Array{Float64}(undef, gyro_cb_len)
+    gyro_filtered_x = Array{Float64}(undef, gyro_cb_len)
 
 
     @pywith log_obj.crazyflie.syncLogger.SyncLogger(scf, log_profiles.lg_stab) as logger begin
@@ -74,7 +76,7 @@ function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, coun
             data = log_entry[2]
             logconf_name = log_entry[3]
 
-            # Core.println("Pushed Timestamp: ", timestamp)
+
             # @printf "   Raw gyro: %.3f    %.3f    %.3f" data["gyro_unfiltered.x"] data["gyro_unfiltered.y"] data["gyro_unfiltered.z"]
             # println("")
 
@@ -82,25 +84,30 @@ function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, coun
             # sample = GyroData(timestamp, data["gyro_unfiltered.x"], data["gyro_unfiltered.y"], data["gyro_unfiltered.z"])
 
             push!(gyro_cb_x, data["gyro_unfiltered.x"])
+            push!(gyro_cb_y, data["gyro_unfiltered.x"])
+            push!(gyro_cb_x, data["gyro_unfiltered.x"])
 
 
             if count % 2 == 0
+                Core.println("Pushed Timestamp: ", timestamp)
+
                 gyro_filtered_x = filt(chebyshev_filter, gyro_cb_x.buffer)
                 gyro_filtered_y = filt(chebyshev_filter, gyro_cb_y.buffer)
                 gyro_filtered_z = filt(chebyshev_filter, gyro_cb_z.buffer)
 
                 sample = GyroData(timestamp, gyro_filtered_x[5], gyro_filtered_y[5], gyro_filtered_z[5])
 
-                begin
-                    lock(lk)
-                    try
-                        push!(task_cb, sample)
-                        # push!(gyro_cb, sample.ẋ)
+                # begin
+                #     lock(lk)
+                #     try
+                #         push!(task_cb, sample)
+                #     finally
+                #         unlock(lk)
+                #     end
+                # end
 
-                    finally
-                        unlock(lk)
-                    end
-                end
+                push!(samples_channel, sample)
+
 
                 # send data to gui
                 serialize(io, sample)

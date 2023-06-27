@@ -52,28 +52,31 @@ function main_task(samples_channel::Channel)
 
 
 
-            begin
-                # Core.println("Waiting to lock")
-                lock(lk)
-                try
-                    sample = popfirst!(task_cb)
-                    # timestamp = sample.timestamp
-                    # Core.println("Popped Timestamp $(i): ", sample.timestamp)
+            # begin
+            #     # Core.println("Waiting to lock")
+            #     lock(lk)
+            #     try
+            #         sample = popfirst!(task_cb)
+            #         # timestamp = sample.timestamp
+            #         # Core.println("Popped Timestamp $(i): ", sample.timestamp)
 
-                    # apply flilter to data in circular buffer
-                    # gyro_filtered_x = filt(chebyshev_filter, task_cb.buffer)
+            #         # apply flilter to data in circular buffer
+            #         # gyro_filtered_x = filt(chebyshev_filter, task_cb.buffer)
 
-                    println("Filtered $(sample.timestamp): ", sample.ẋ)
+            #         println("Filtered $(sample.timestamp): ", sample.ẋ)
 
-                    # gyro_filtered_x = filt(chebyshev_filter, gyro_cb.buffer)
+            #         # gyro_filtered_x = filt(chebyshev_filter, gyro_cb.buffer)
 
-                    # # println("Filtered $(sample.timestamp): ", gyro_filtered_x[5])
-                    # println("Filtered $(timestamp): ", gyro_filtered_x[5])
+            #         # # println("Filtered $(sample.timestamp): ", gyro_filtered_x[5])
+            #         # println("Filtered $(timestamp): ", gyro_filtered_x[5])
 
-                finally
-                    unlock(lk)
-                end
-            end
+            #     finally
+            #         unlock(lk)
+            #     end
+            # end
+
+            sample = take!(samples_channel)
+            Core.println("Popped Timestamp $(i): ", sample.timestamp)
 
 
             # # pop latest data from circular buffer
@@ -105,7 +108,7 @@ function main_task(samples_channel::Channel)
 
             # end
 
-            sleep(1 / task_rate)
+            # sleep(1 / task_rate)
         end
 
         # # to shutdown gui receiver
