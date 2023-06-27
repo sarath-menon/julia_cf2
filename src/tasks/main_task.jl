@@ -57,18 +57,18 @@ function main_task(samples_channel::Channel)
                 lock(lk)
                 try
                     sample = popfirst!(task_cb)
-                    timestamp = sample.timestamp
+                    # timestamp = sample.timestamp
                     # Core.println("Popped Timestamp $(i): ", sample.timestamp)
 
                     # apply flilter to data in circular buffer
                     # gyro_filtered_x = filt(chebyshev_filter, task_cb.buffer)
 
-                    # println("Filtered : ", gyro_filtered_x)
+                    println("Filtered $(sample.timestamp): ", sample.ẋ)
 
-                    gyro_filtered_x = filt(chebyshev_filter, gyro_cb.buffer)
+                    # gyro_filtered_x = filt(chebyshev_filter, gyro_cb.buffer)
 
-                    # println("Filtered $(sample.timestamp): ", gyro_filtered_x[5])
-                    println("Filtered $(timestamp): ", gyro_filtered_x[5])
+                    # # println("Filtered $(sample.timestamp): ", gyro_filtered_x[5])
+                    # println("Filtered $(timestamp): ", gyro_filtered_x[5])
 
                 finally
                     unlock(lk)

@@ -43,6 +43,24 @@ function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, coun
     io = IOBuffer()
     port = 4444
 
+    # create chebyshev filter 
+    ripple = 3 # max passband ripple in dB
+    f_s = 1000 # sampling time [hz]
+    f_c = 80 # cutoff frequency [hz]
+    m = 4 # filter order
+
+    responsetype = Lowpass(f_c; fs=f_s)
+    designmethod = Chebyshev1(m, ripple)
+    chebyshev_filter = digitalfilter(responsetype, designmethod)
+
+    # create circular buffer to hold gyro data
+    gyro_cb_x = CircularBuffer{Float64}(gyro_cb_len)
+    gyro_cb_y = CircularBuffer{Float64}(gyro_cb_len)
+    gyro_cb_z = CircularBuffer{Float64}(gyro_cb_len)
+
+    gyro_filtered_x = Array{Float64}(undef, 5)
+
+
     @pywith log_obj.crazyflie.syncLogger.SyncLogger(scf, log_profiles.lg_stab) as logger begin
 
         count::Integer = 0
@@ -61,33 +79,38 @@ function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, coun
             # println("")
 
 
-            sample = GyroData(timestamp, data["gyro_unfiltered.x"], data["gyro_unfiltered.y"], data["gyro_unfiltered.z"])
+            # sample = GyroData(timestamp, data["gyro_unfiltered.x"], data["gyro_unfiltered.y"], data["gyro_unfiltered.z"])
 
-            # send data to gui
-            serialize(io, sample)
-            data = take!(io)
-            ret = send(soc, ip_address, port, data)
-
-            if ret == false
-                println("Could not send data !")
-            end
+            push!(gyro_cb_x, data["gyro_unfiltered.x"])
 
 
-            # put!(samples_channel, sample)
-            # push data to circular buffer
-            # lock(lk) do
-            #     push!(task_cb, sample.ẋ)
-            # end
-            # unlock(lk)
+            if count % 2 == 0
+                gyro_filtered_x = filt(chebyshev_filter, gyro_cb_x.buffer)
+                gyro_filtered_y = filt(chebyshev_filter, gyro_cb_y.buffer)
+                gyro_filtered_z = filt(chebyshev_filter, gyro_cb_z.buffer)
 
-            begin
-                lock(lk)
-                try
-                    push!(task_cb, sample)
-                    push!(gyro_cb, sample.ẋ)
-                finally
-                    unlock(lk)
+                sample = GyroData(timestamp, gyro_filtered_x[5], gyro_filtered_y[5], gyro_filtered_z[5])
+
+                begin
+                    lock(lk)
+                    try
+                        push!(task_cb, sample)
+                        # push!(gyro_cb, sample.ẋ)
+
+                    finally
+                        unlock(lk)
+                    end
                 end
+
+                # send data to gui
+                serialize(io, sample)
+                data = take!(io)
+                ret = send(soc, ip_address, port, data)
+
+                if ret == false
+                    println("Could not send data !")
+                end
+
             end
 
             count += 1
