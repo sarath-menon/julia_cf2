@@ -143,14 +143,13 @@ function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, coun
                     Core.println("Could not send data !")
                 end
 
-                println("sent to gui")
             end
 
             count += 1
 
-            if count == count_max
-                break
-            end
+            # if count == count_max
+            #     break
+            # end
 
 
             # sleep(1 / fps)

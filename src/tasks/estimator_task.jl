@@ -15,7 +15,7 @@ function estimator_task(samples_channel::Channel)
         count = duration * 1000
 
 
-        for i in 1:count
+        while true
             sample = take!(samples_channel)
             # Core.println("Popped Timestamp $(i): ", sample.timestamp)
 
