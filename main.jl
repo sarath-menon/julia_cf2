@@ -21,7 +21,7 @@ include("src/tasks/comm_utils.jl")
 const duration::Integer = 3
 const gyro_cb_len::Integer = 5
 
-samples_channel = Channel{GyroData}(100);
+samples_channel = Channel{ImuData}(100);
 
 include("src/tasks/tasks.jl")
 

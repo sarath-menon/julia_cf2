@@ -26,10 +26,13 @@ function log_init(log_obj::LoggerStruct1, log_profiles::LogProfiles)
     # Initialize the low-level drivers
     log_obj.cflib.crtp.init_drivers()
 
-    #lg_stab = log_obj.crazyflie.log.LogConfig(name="Stabilizer", period_in_ms=10)
     log_profiles.lg_stab.add_variable("gyro_unfiltered.x", "float")
     log_profiles.lg_stab.add_variable("gyro_unfiltered.y", "float")
     log_profiles.lg_stab.add_variable("gyro_unfiltered.z", "float")
+
+    log_profiles.lg_stab.add_variable("acc_unfiltered.x", "float")
+    log_profiles.lg_stab.add_variable("acc_unfiltered.y", "float")
+    log_profiles.lg_stab.add_variable("acc_unfiltered.z", "float")
 
 end
 
@@ -89,9 +92,12 @@ function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, coun
                 gyro_filtered_y = filt(chebyshev_filter, gyro_cb_y.buffer)
                 gyro_filtered_z = filt(chebyshev_filter, gyro_cb_z.buffer)
 
-                sample = GyroData(timestamp, gyro_filtered_x[5], gyro_filtered_y[5], gyro_filtered_z[5])
+                acc_data = AccData(0.0, 0.0, 0.0)
+                gyro_data = GyroData(gyro_filtered_x[5], gyro_filtered_y[5], gyro_filtered_z[5])
 
-                push!(samples_channel, sample)
+                imu_data = ImuData(timestamp, acc_data, gyro_data)
+
+                push!(samples_channel, imu_data)
 
             end
 
