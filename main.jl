@@ -13,23 +13,20 @@ using DSP
 using Sockets
 using Serialization
 
-
 GLMakie.activate!(inline=false)
 
-
 ##
-
 include("src/tasks/comm_utils.jl")
+
+const duration::Integer = 3
+const gyro_cb_len::Integer = 5
 
 samples_channel = Channel{GyroData}(100);
 
-
 include("src/tasks/tasks.jl")
 
-
-
-cfread_task_func(samples_channel, 5)
-main_task(samples_channel)
+sensors_task(samples_channel, duration)
+estimator_task(samples_channel)
 
 ##
 
