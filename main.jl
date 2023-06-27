@@ -21,10 +21,8 @@ GLMakie.activate!(inline=false)
 
 include("src/tasks/comm_utils.jl")
 
-lk = ReentrantLock()
 samples_channel = Channel{GyroData}(100);
 
-task_cb = CircularBuffer{GyroData}(5)
 
 include("src/tasks/tasks.jl")
 

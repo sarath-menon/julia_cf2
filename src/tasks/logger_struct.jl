@@ -89,22 +89,13 @@ function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, coun
 
 
             if count % 2 == 0
-                Core.println("Pushed Timestamp: ", timestamp)
+                # Core.println("Pushed Timestamp: ", timestamp)
 
                 gyro_filtered_x = filt(chebyshev_filter, gyro_cb_x.buffer)
                 gyro_filtered_y = filt(chebyshev_filter, gyro_cb_y.buffer)
                 gyro_filtered_z = filt(chebyshev_filter, gyro_cb_z.buffer)
 
                 sample = GyroData(timestamp, gyro_filtered_x[5], gyro_filtered_y[5], gyro_filtered_z[5])
-
-                # begin
-                #     lock(lk)
-                #     try
-                #         push!(task_cb, sample)
-                #     finally
-                #         unlock(lk)
-                #     end
-                # end
 
                 push!(samples_channel, sample)
 

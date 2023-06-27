@@ -45,58 +45,11 @@ function main_task(samples_channel::Channel)
 
 
         for i in 1:count
-            # sample = take!(samples_channel)
-            # lock(lk) do
-            #     sample = pop!(task_cb)
-            # end
-
-
-
-            # begin
-            #     # Core.println("Waiting to lock")
-            #     lock(lk)
-            #     try
-            #         sample = popfirst!(task_cb)
-            #         # timestamp = sample.timestamp
-            #         # Core.println("Popped Timestamp $(i): ", sample.timestamp)
-
-            #         # apply flilter to data in circular buffer
-            #         # gyro_filtered_x = filt(chebyshev_filter, task_cb.buffer)
-
-            #         println("Filtered $(sample.timestamp): ", sample.ẋ)
-
-            #         # gyro_filtered_x = filt(chebyshev_filter, gyro_cb.buffer)
-
-            #         # # println("Filtered $(sample.timestamp): ", gyro_filtered_x[5])
-            #         # println("Filtered $(timestamp): ", gyro_filtered_x[5])
-
-            #     finally
-            #         unlock(lk)
-            #     end
-            # end
-
             sample = take!(samples_channel)
-            Core.println("Popped Timestamp $(i): ", sample.timestamp)
+            # Core.println("Popped Timestamp $(i): ", sample.timestamp)
 
-
-            # # pop latest data from circular buffer
-
-            # # push data to circular buffer
-            # push!(gyro_cb, sample.ẋ)
-
-
-
-            # println("Gyro x:", sample[1])
+            Core.println("Gyro x $(sample.timestamp): ", sample.ẋ)
             # println("Index", i)
-
-
-            # # state = GyroData(i, sample[1], sample[2], sample[3])
-            # serialize(io, sample)
-
-            # send_data(take!(io))
-
-
-
 
             # # send data to gui channel
             # if i % 10 == 0
