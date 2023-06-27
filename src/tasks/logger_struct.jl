@@ -66,9 +66,7 @@ function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, coun
     @pywith log_obj.crazyflie.syncLogger.SyncLogger(scf, log_profiles.lg_stab) as logger begin
 
         count::Integer = 0
-        fps::Integer = 1000
-
-
+        # fps::Integer = 1000
 
         for log_entry in logger
 
@@ -76,12 +74,8 @@ function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, coun
             data = log_entry[2]
             logconf_name = log_entry[3]
 
-
             # @printf "   Raw gyro: %.3f    %.3f    %.3f" data["gyro_unfiltered.x"] data["gyro_unfiltered.y"] data["gyro_unfiltered.z"]
             # println("")
-
-
-            # sample = GyroData(timestamp, data["gyro_unfiltered.x"], data["gyro_unfiltered.y"], data["gyro_unfiltered.z"])
 
             push!(gyro_cb_x, data["gyro_unfiltered.x"])
             push!(gyro_cb_y, data["gyro_unfiltered.x"])
@@ -98,16 +92,6 @@ function simple_log(log_obj::LoggerStruct1, log_profiles::LogProfiles, scf, coun
                 sample = GyroData(timestamp, gyro_filtered_x[5], gyro_filtered_y[5], gyro_filtered_z[5])
 
                 push!(samples_channel, sample)
-
-
-                # send data to gui
-                serialize(io, sample)
-                data = take!(io)
-                ret = send(soc, ip_address, port, data)
-
-                if ret == false
-                    println("Could not send data !")
-                end
 
             end
 
